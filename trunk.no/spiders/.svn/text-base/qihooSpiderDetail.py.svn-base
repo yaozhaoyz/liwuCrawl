@@ -1,0 +1,93 @@
+from scrapy.contrib.spiders import  CrawlSpider, Rule
+from scrapy.spider import BaseSpider
+from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.selector import HtmlXPathSelector
+from scrapy.http import FormRequest
+from scrapy.http import Request
+from scrapy.item import Item
+from urllib import quote
+from trunk.items import QihooItem 
+from trunk.items import QihooDetailItem
+import re
+import sys  
+reload(sys)  
+sys.setdefaultencoding('utf8')   
+
+detailURLs = "result/detailurl.txt";
+tempOUT = open("result/out.detail",'w');
+tempOUT2 = open("result/out.validOrNot",'w');
+class QihooDSpider(CrawlSpider):	   
+#CrawlSpider):
+	name = "Qihoo2"
+	DOWNLOAD_DELAY = 1.0
+	allowed_domains = ["360.cn"]
+
+	def start_requests(self):
+		for line in open(detailURLs):
+#tempOUT.write("\n"+line+"\t");
+			try:
+				a,b,c,d,e = line.strip().split("\"");
+			except:
+				continue;
+			tempOUT2.write("\n"+d+"\t");
+			tempOUT.write("\007"+d+"\001");	
+			yield self.make_requests_from_url(d);
+
+	def parse(self, response):
+		test2_url = ""
+		try:
+			hxs = HtmlXPathSelector(response)
+			iconURL = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/dl[1]/dt[1]/img[1]")[0].extract();
+			gameName = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/dl[1]/dd[1]/h3[1]")[0].extract();
+			t_srcs_str = response.body 
+			t_srcs = re.findall(r"var srcs = \[([\s\S]*?)\];",t_srcs_str)[0];
+			t_imgs = re.findall(r"<img src=\"(.*?)jpg\"",t_srcs_str);
+			t_baikeName = re.findall(r"baike\_name\":\"(.*?)\"",t_srcs_str)[0];
+			tempOUT2.write("thisURL:"+"dt_"+t_baikeName);
+			thisOUT = open("result/dt_"+t_baikeName,'w');
+			print thisOUT 
+			gameImages = "";
+			for i in t_imgs:
+				gameImages += i;
+				gameImages += "jpg"
+				gameImages += "\002"
+			whichAppStroe = re.findall(r"'source':'(.*?)'",t_srcs)[0]
+			sizeMB = re.findall(r"'size':'(.*?)'",t_srcs)[0];
+			downloadURL = re.findall(r"'downurl':'(.*?)'",t_srcs)[0];
+			marketIcon = re.findall(r"'mkicon':'(.*?)'",t_srcs)[0];
+			url = 'http://intf.baike.360.cn/index.php'
+			commentStar =  hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/dl[1]/dd[2]/p[1]/span[1]")[0].extract();
+			commentScore = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/dl[1]/dd[2]/em[1]")[0].extract();
+			downloadTimes = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/dl[1]/dd[2]/p[2]")[0].extract();
+			updateTime = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/dl[1]/dd[2]/p[3]")[0].extract();
+			hasAdOrNot = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/ul[1]/li[3]")[0].extract();
+			freeOrMoney = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[1]/ul[1]/li[2]")[0].extract();
+			gameVersion =  hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[4]/div[1]/div[1]/table[1]/tr[1]/td[2]")[0].extract();
+			gameOS = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[4]/div[1]/div[1]/table[1]/tr[1]/td[3]")[0].extract();
+			language= hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[4]/div[1]/div[1]/table[1]/tr[2]/td[1]")[0].extract();
+			qihooClassify = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[4]/div[1]/div[1]/table[1]/tr[2]/td[2]")[0].extract();
+			gameCompany = hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[4]/div[1]/div[1]/table[1]/tr[2]/td[3]")[0].extract();
+			qihooDescription =  hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[4]/div[1]/div[1]/div[1]/div[1]")[0].extract();
+			commentItem = ""
+			commentCount= "5000" # hxs.select("/html[1]/body[1]/div[4]/div[2]/div[1]/div[1]/div[3]/ul[1]/li[2]/em[1]")[0].extract()
+			tempOUT.write(""+iconURL+"\001"+gameName+"\001"+whichAppStroe+"\001"+marketIcon+"\001"+commentStar+"\001"+commentScore+"\001"+downloadTimes+"\001"+updateTime+"\001"+hasAdOrNot+"\001"+freeOrMoney+"\001"+sizeMB+"\001"+gameVersion+"\001"+gameOS+"\001"+language+"\001"+qihooClassify+"\001"+gameCompany+"\001"+qihooDescription+"\001"+gameImages+"\001"+downloadURL+"\001"+commentItem+"\001"+commentCount+"\001"+t_baikeName);
+			thisOUT.write(""+iconURL+"\001"+gameName+"\001"+whichAppStroe+"\001"+marketIcon+"\001"+commentStar+"\001"+commentScore+"\001"+downloadTimes+"\001"+updateTime+"\001"+hasAdOrNot+"\001"+freeOrMoney+"\001"+sizeMB+"\001"+gameVersion+"\001"+gameOS+"\001"+language+"\001"+qihooClassify+"\001"+gameCompany+"\001"+qihooDescription+"\001"+gameImages+"\001"+downloadURL+"\001"+commentItem+"\001"+commentCount+"\001"+t_baikeName);
+			req_url="http://intf.baike.360.cn/index.php?"
+			qt_baikeName = quote(t_baikeName);
+			#payload = {'c': 'message', 'a':'getmessage','name':qt_baikeName,'start':'0','count':'5000','callback':'cm.onSuccessComment','type':'all'}
+			test_url="http://intf.baike.360.cn/index.php?c=message&a=getmessage&name=%E9%80%94%E6%B8%B8%E5%8D%95%E6%9C%BA%E6%96%97%E5%9C%B0%E4%B8%BB%20Android_com.tuyoo.doudizhu.main&start=5&count=5&callback=cm.onSuccessComment&type=all"
+			test2_url=req_url+"c=message&a=getmessage&name="+qt_baikeName+"&start=0&count=5000&callback=cm.onSuccessComment&type=all"
+#return FormRequest(url=req_url, formdata=payload, callback=self.parse_stores)
+#tempOUT2.write("$$$"+test2_url);
+			tempOUT.write("\001"+test2_url);
+			thisOUT.write("\001"+test2_url);
+		except:
+			tempOUT2.write("hxs error!");
+			return None 
+		return Request(test2_url,meta={'url':"result/dt_"+t_baikeName},callback=self.parse_stores)
+
+	def parse_stores(self, response):
+		thisURL = response.meta['url'];
+		thisOUT = open(""+thisURL+".comment",'w');
+		thisOUT.write("\001"+response.body+"\006");
+		tempOUT.write("\001"+response.body+"\006");

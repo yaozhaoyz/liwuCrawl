@@ -1,0 +1,16 @@
+/usr/local/lib/python2.7/dist-packages/Scrapy-0.20.2-py2.7.egg/scrapy/selector/lxmlsel.py:20: ScrapyDeprecationWarning: HtmlXPathSelector is deprecated, instanciate scrapy.selector.Selector instead
+  category=ScrapyDeprecationWarning, stacklevel=1)
+/root/install/scrapy/scrapy/douban/douban/spiders/lidongde2Liwu.py:46: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  pageTitle = hxs.select("/html/head/title/text()")[0].extract();
+/root/install/scrapy/scrapy/douban/douban/spiders/lidongde2Liwu.py:51: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  title = hxs.select("/html/body/div[2]/div[3]/div[1]/div[@class='list_box']/div[@class='list_box_con']/div[@class='list_box_tit']/a/text()")[i].extract();
+/root/install/scrapy/scrapy/douban/douban/spiders/lidongde2Liwu.py:52: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  href = hxs.select("/html/body/div[2]/div[3]/div[1]/div[@class='list_box']/div[@class='list_box_con']/div[@class='list_box_tit']/a/@href")[i].extract();
+/root/install/scrapy/scrapy/douban/douban/spiders/lidongde2Liwu.py:54: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  tags = hxs.select("/html/body/div[2]/div[3]/div[1]/div[@class='list_box']/div[@class='list_box_con']/div[@class='list_box_inf']/text()")[i].extract();
+/root/install/scrapy/scrapy/douban/douban/spiders/lidongde2Liwu.py:55: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  price = hxs.select("/html/body/div[2]/div[3]/div[1]/div[@class='list_box']/div[@class='list_box_con']/div[@class='list_box_inf']/span/text()")[i].extract();
+/root/install/scrapy/scrapy/douban/douban/spiders/lidongde2Liwu.py:56: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  desc = hxs.select("/html/body/div[2]/div[3]/div[1]/div[@class='list_box']/div[@class='list_box_con']/div[@class='list_box_des']/text()")[i].extract();
+/root/install/scrapy/scrapy/douban/douban/spiders/lidongde2Liwu.py:57: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  img = hxs.select("/html/body/div[2]/div[3]/div[1]/div[@class='list_box']/div[@class='list_box_con']/div[@class='list_box_pic fr']/img/@src")[i].extract();
