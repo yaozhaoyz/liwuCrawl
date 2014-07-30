@@ -17,7 +17,7 @@ class lidongdeSpider(CrawlSpider):
 
 	rules = [
 		Rule(SgmlLinkExtractor(allow=('/liwu/[a-zA-Z]+')), callback='parse_group_home_page'), 
-		Rule(SgmlLinkExtractor(allow=('/gohao/[a-zA-Z]+')), callback='parse_group_home_page') ]
+		Rule(SgmlLinkExtractor(allow=('/gohao/[a-zA-Z]+')), callback='parse_group_home_page') ] 
 
 	def parse_group_home_page(self, response):
 		self.log("Fetch group home page: %s" % response.url)
