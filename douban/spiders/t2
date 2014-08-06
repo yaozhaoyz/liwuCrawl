@@ -1,0 +1,16 @@
+/usr/local/lib/python2.7/dist-packages/Scrapy-0.20.2-py2.7.egg/scrapy/selector/lxmlsel.py:20: ScrapyDeprecationWarning: HtmlXPathSelector is deprecated, instanciate scrapy.selector.Selector instead
+  category=ScrapyDeprecationWarning, stacklevel=1)
+/root/install/scrapy/scrapy/douban/douban/spiders/taobaoFirst.py:39: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  img = hxs.select("//div[@class='item-box st-itembox']/div/p/a/span/img/@data-ks-lazyload")[i].extract();
+/root/install/scrapy/scrapy/douban/douban/spiders/taobaoFirst.py:40: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  itemLink = hxs.select("//div[@class='item-box st-itembox']/h3[@class='summary']/a/@href")[i].extract()
+/root/install/scrapy/scrapy/douban/douban/spiders/taobaoFirst.py:41: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  title= hxs.select("//div[@class='item-box st-itembox']/h3[@class='summary']/a/@title")[i].extract()
+/root/install/scrapy/scrapy/douban/douban/spiders/taobaoFirst.py:42: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  storeName = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/text()")[i].extract()
+/root/install/scrapy/scrapy/douban/douban/spiders/taobaoFirst.py:43: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  storeLink = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/@href")[i].extract()
+/root/install/scrapy/scrapy/douban/douban/spiders/taobaoFirst.py:44: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  soldAmount= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col end dealing']/text()")[i].extract()
+/root/install/scrapy/scrapy/douban/douban/spiders/taobaoFirst.py:45: ScrapyDeprecationWarning: Call to deprecated function select. Use .xpath() instead.
+  price= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col price']/text()")[i].extract()

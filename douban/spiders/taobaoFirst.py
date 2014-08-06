@@ -34,12 +34,13 @@ class taobaoSpider(CrawlSpider):
 		query = response.meta['query']
 		query = query.replace("\n","")
 		for i in range(1,49):
+			taobaoFile.write(str(i)+"\n");
 			hxs = HtmlXPathSelector(response)
 			img = hxs.select("//div[@class='item-box st-itembox']/div/p/a/span/img/@data-ks-lazyload")[i].extract();
 			itemLink = hxs.select("//div[@class='item-box st-itembox']/h3[@class='summary']/a/@href")[i].extract()
 			title= hxs.select("//div[@class='item-box st-itembox']/h3[@class='summary']/a/@title")[i].extract()
-			storeName = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsc-tgr']/a/text()")[i].extract()
-			storeLink = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsc-tgr']/a/@href")[i].extract()
+			storeName = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/text()")[i].extract()
+			storeLink = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/@href")[i].extract()
 			soldAmount= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col end dealing']/text()")[i].extract()
 			price= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col price']/text()")[i].extract()
 			taobaoFile.write(query)

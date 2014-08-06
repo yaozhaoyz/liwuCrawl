@@ -20,7 +20,7 @@ fileOutliwu = open("/disk2/liwu/lidongde/2liwu_"+nowday,'w');
 fileOutgohao= open("/disk2/liwu/lidongde/2gohao_"+nowday,'w');
 tempOut = open("/disk2/liwu/lidongde/tmp",'w');
 
-class liwuSpider(CrawlSpider):	   
+class liwu2Spider(CrawlSpider):	   
 	name = "lidongde2liwu"
 	allowed_domains = ["lidongde.com"]
 
@@ -48,21 +48,19 @@ class liwuSpider(CrawlSpider):
 		hxs= HtmlXPathSelector(response)
 		url = response.url
 		pageTitle = hxs.select("/html/head/title/text()")[0].extract();
-		i = 0;
+		i = -1;
 		while(i<20): 
 			i+= 1;
 			try:
 				title = hxs.select("/html/body/div[2]/div[3]/div/div/div[2]/a/text()")[i].extract();
-				#href = hxs.select("/html/body/div[2]/div[3]/div/div/div[2]/a/@href")[i].extract();
-				#href = "http://www.lidongde.com"+href;
-				#img = hxs.select("/html/body/div[2]/div[3]/div/div/div[2]/a/img/@src")[i].extract();
-				#img = "http://www.lidongde.com"+img;
-				#price = hxs.select("/html/body/div[2]/div[3]/div/div/div[2]/span/text()")[i].extract();
+				href = hxs.select("/html/body/div[2]/div[3]/div/div/div[2]/a/@href")[i].extract();
+				href = "http://www.lidongde.com"+href;
+				img = hxs.select("/html/body/div[2]/div[3]/div/div/div[1]/a/img/@src")[i].extract();
+				img = "http://www.lidongde.com"+img;
+				price = hxs.select("/html/body/div[2]/div[3]/div/div/div[1]/span/text()")[i].extract();
 				tags = "" 
-				price = "" 
 				desc = "" 
-				fileOutgohao.write(pageTitle+"\t"+url);
-				#fileOutgohao.write(pageTitle+"\t"+url+"\t"+title+"\t"+href+"\t"+tags+"\t"+price+"\t"+desc+"\t"+img+"\n");
+				fileOutgohao.write(pageTitle+"\t"+url+"\t"+title+"\t"+href+"\t"+tags+"\t"+price+"\t"+desc+"\t"+img+"\n");
 			except:
 				continue;
 		return ;
@@ -71,7 +69,7 @@ class liwuSpider(CrawlSpider):
 		hxs = HtmlXPathSelector(response)
 		url = response.url
 		pageTitle = hxs.select("/html/head/title/text()")[0].extract();
-		i = 0;
+		i = -1;
 		while(i<5): 
 			i+= 1;
 			try:
