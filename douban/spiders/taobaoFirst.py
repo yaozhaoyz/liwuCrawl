@@ -42,7 +42,7 @@ class taobaoSpider(CrawlSpider):
 			storeName = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/text()")[i].extract()
 			storeLink = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/@href")[i].extract()
 			soldAmount= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col end dealing']/text()")[i].extract()
-			price= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col price']/text()")[i].extract()
+			price= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col price g_price g_price-highlight']/strong/text()")[i].extract()
 			taobaoFile.write(query)
 			taobaoFile.write(seperatorChar)
 			taobaoFile.write(img)
