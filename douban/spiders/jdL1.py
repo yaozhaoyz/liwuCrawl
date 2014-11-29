@@ -33,15 +33,14 @@ class jdSpider(CrawlSpider):
 		query = response.meta['query']
 		query = query.replace("\n","")
 		for i in range(1,28):
-			jdFile.write(str(i)+"\n");
 			hxs = HtmlXPathSelector(response)
 			img = hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[1]/a/img/@data-lazyload")[0].extract();
 			itemLink = hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[2]/a/@href")[0].extract()
 			title= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[2]/a/text()")[0].extract()
 			storeName = "" 
 			storeLink = "" 
-			soldAmount= ""#hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col end dealing']/text()")[i].extract()
-			price= ""#hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col price g_price g_price-highlight']/strong/text()")[i].extract()
+			soldAmount= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[4]/a/text()")[0].extract().replace("已有","").replace("人评价","")
+			price= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[3]/strong/text()")[0].extract().replace("￥","")
 			jdFile.write(query)
 			jdFile.write(seperatorChar)
 			jdFile.write(img)
@@ -54,7 +53,7 @@ class jdSpider(CrawlSpider):
 			jdFile.write(seperatorChar)
 			jdFile.write(storeLink)
 			jdFile.write(seperatorChar)
-			jdFile.write(soldAmount.encode('utf8'))
+			jdFile.write(soldAmount)
 			jdFile.write(seperatorChar)
-			jdFile.write(price.encode('utf8'))
+			jdFile.write(price)
 			jdFile.write("\n")
