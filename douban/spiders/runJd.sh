@@ -5,6 +5,7 @@ cur_dir=$(cd "$(dirname "$0")"; pwd)
 cd $cur_dir
 
 echo "Begin jd crawler"
+cd /root/install/scrapy/scrapy/douban/douban/spiders
 date
 
 echo "cur_dir:$cur_dir"

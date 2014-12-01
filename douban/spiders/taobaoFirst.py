@@ -6,6 +6,7 @@ from scrapy.selector import HtmlXPathSelector
 from scrapy.http import FormRequest
 from scrapy.http import Request
 from scrapy.item import Item
+import json
 import re
 import datetime
 
@@ -20,42 +21,43 @@ class taobaoSpider(CrawlSpider):
 	allowed_domains = ["taobao.com"]
 
 	def start_requests(self):
-		search = "http://s.taobao.com/search?q=";
+		search = "http://s.m.taobao.com/search?event_submit_do_new_search_auction=1&_input_charset=utf-8&topSearch=1&atype=b&searchfrom=1&action=home%3Aredirect_app_action&from=1&sst=1&n=20&buying=buyitnow&m=api4h5&abtest=1&wlsort=1&style=list&closeModues=nav%2Cselecthot%2Conesearch&callback=json&q=";
 		for term in open("/disk2/liwu/taobao.basicQuery.txt"):
-			term = term.strip().strip("\n").strip("\t")
+			term = term.strip().strip("\n").strip("\t").replace("\n","")
 			count = 0;
 			while(count < 44):
-				queryStr = search + term + "&s="+ str(count)
+				queryStr = search + term + "&page="+ str(count)
 				yield Request(queryStr,meta={'query':term},callback=self.parse)
 				#yield self.make_requests_from_url(queryStr,meta={'query':term})
-				count += 44;
+				count += 1;
 
 	def parse(self, response):
 		query = response.meta['query']
-		query = query.replace("\n","")
-		for i in range(1,49):
-			taobaoFile.write(str(i)+"\n");
-			hxs = HtmlXPathSelector(response)
-			img = hxs.select("//div[@class='item-box st-itembox']/div/p/a/span/img/@data-ks-lazyload")[i].extract();
-			itemLink = hxs.select("//div[@class='item-box st-itembox']/h3[@class='summary']/a/@href")[i].extract()
-			title= hxs.select("//div[@class='item-box st-itembox']/h3[@class='summary']/a/@title")[i].extract()
-			storeName = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/text()")[i].extract()
-			storeLink = hxs.select("//div[@class='item-box st-itembox']/div[@class='row']/div[@class='col seller feature-dsi-tgr']/a/@href")[i].extract()
-			soldAmount= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col end dealing']/text()")[i].extract()
-			price= hxs.select("//div[@class='item-box st-itembox']/div[@class='row row-focus']/div[@class='col price g_price g_price-highlight']/strong/text()")[i].extract()
+		jsonStr = str(response.body);
+		ind = jsonStr.find("json(");
+		jsonStr = jsonStr[ind+5:]
+		jsonStr = jsonStr.rstrip(");</pre>");
+		taobaoFile.write(jsonStr+"\n")
+		jsonMap=  json.loads(jsonStr)
+		if( jsonMap["result"] != "true"):
+			return "";
+		jsonList = jsonMap["listItem"];
+		for item in jsonList:
+			title =  item["name"].encode('utf8');
+			img = item["img2"];
+			url = item["url"]
+			price = item["price"]
+			soldAmount = item["act"]
 			taobaoFile.write(query)
+			taobaoFile.write(seperatorChar)
+			taobaoFile.write(title)
 			taobaoFile.write(seperatorChar)
 			taobaoFile.write(img)
 			taobaoFile.write(seperatorChar)
-			taobaoFile.write(itemLink)
+			taobaoFile.write(price)
 			taobaoFile.write(seperatorChar)
-			taobaoFile.write(title.encode('utf8'))
+			taobaoFile.write(url)
 			taobaoFile.write(seperatorChar)
-			taobaoFile.write(storeName.encode('utf8'))
-			taobaoFile.write(seperatorChar)
-			taobaoFile.write(storeLink)
-			taobaoFile.write(seperatorChar)
-			taobaoFile.write(soldAmount.encode('utf8'))
-			taobaoFile.write(seperatorChar)
-			taobaoFile.write(price.encode('utf8'))
+			taobaoFile.write(soldAmount)
 			taobaoFile.write("\n")
+		return "";

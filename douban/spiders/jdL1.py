@@ -33,27 +33,30 @@ class jdSpider(CrawlSpider):
 		query = response.meta['query']
 		query = query.replace("\n","")
 		for i in range(1,28):
-			hxs = HtmlXPathSelector(response)
-			img = hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[1]/a/img/@data-lazyload")[0].extract();
-			itemLink = hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[2]/a/@href")[0].extract()
-			title= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[2]/a/text()")[0].extract()
-			storeName = "" 
-			storeLink = "" 
-			soldAmount= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[4]/a/text()")[0].extract().replace("已有","").replace("人评价","")
-			price= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[3]/strong/text()")[0].extract().replace("￥","")
-			jdFile.write(query)
-			jdFile.write(seperatorChar)
-			jdFile.write(img)
-			jdFile.write(seperatorChar)
-			jdFile.write(itemLink)
-			jdFile.write(seperatorChar)
-			jdFile.write(title.strip().strip('\t').encode('utf8'))
-			jdFile.write(seperatorChar)
-			jdFile.write(storeName.encode('utf8'))
-			jdFile.write(seperatorChar)
-			jdFile.write(storeLink)
-			jdFile.write(seperatorChar)
-			jdFile.write(soldAmount)
-			jdFile.write(seperatorChar)
-			jdFile.write(price)
-			jdFile.write("\n")
+			try:
+				hxs = HtmlXPathSelector(response)
+				img = hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[1]/a/img/@data-lazyload")[0].extract();
+				itemLink = hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[2]/a/@href")[0].extract()
+				title= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[2]/a/text()")[0].extract()
+				storeName = "" 
+				storeLink = "" 
+				soldAmount= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[4]/a/text()")[0].extract().replace("已有","").replace("人评价","")
+				price= hxs.select("//*[@id='plist']/ul/li["+str(i)+"]/div/div[3]/strong/text()")[0].extract().replace("￥","")
+				jdFile.write(query)
+				jdFile.write(seperatorChar)
+				jdFile.write(img)
+				jdFile.write(seperatorChar)
+				jdFile.write(itemLink)
+				jdFile.write(seperatorChar)
+				jdFile.write(title.strip().strip('\t').encode('utf8'))
+				jdFile.write(seperatorChar)
+				jdFile.write(storeName.encode('utf8'))
+				jdFile.write(seperatorChar)
+				jdFile.write(storeLink)
+				jdFile.write(seperatorChar)
+				jdFile.write(soldAmount)
+				jdFile.write(seperatorChar)
+				jdFile.write(price)
+				jdFile.write("\n")
+			except:
+				continue;
